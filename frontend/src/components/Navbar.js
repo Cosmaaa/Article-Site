@@ -1,55 +1,33 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Navbar = ({ user, onLogout, onShowLogin, onShowSignup }) => {
+const Navbar = ({ user, onLogout }) => {
   return (
-    <nav className="bg-gray-800 text-white w-full p-4">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        
-        <div className="flex space-x-4">
-          <button
-            className="hover:bg-gray-700 px-4 py-2 rounded transition duration-300"
-            onClick={() => window.location.href = '/'}
-          >
-            Home
-          </button>
-          <button
-            className="hover:bg-gray-700 px-4 py-2 rounded transition duration-300"
-            onClick={() => window.location.href = '/articles'}
-          >
-            Articles
-          </button>
-        </div>
+    <nav className="bg-gray-800 text-white px-4 py-3 flex items-center justify-between">
+      {/* Stânga - Home */}
+      <div className="flex-1">
+        <Link to="/" className="hover:underline font-semibold">Home</Link>
+      </div>
 
-        
-        <div className="flex items-center space-x-4">
-          {user ? (
-            <>
-              
-              <span className="font-semibold">{user.name}</span>
-              <button
-                className="hover:bg-gray-700 px-4 py-2 rounded transition duration-300"
-                onClick={onLogout}
-              >
-                Log Out
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                className="hover:bg-gray-700 px-4 py-2 rounded transition duration-300"
-                onClick={onShowLogin}
-              >
-                Log In
-              </button>
-              <button
-                className="hover:bg-gray-700 px-4 py-2 rounded transition duration-300"
-                onClick={onShowSignup}
-              >
-                Sign Up
-              </button>
-            </>
-          )}
-        </div>
+      {/* Mijloc - Articles */}
+      <div className="flex-1 text-center">
+        <Link to="/articles" className="hover:underline font-semibold">Articles</Link>
+      </div>
+
+      {/* Dreapta - Auth */}
+      <div className="flex-1 text-right space-x-4">
+        {!user && (
+          <>
+            <Link to="/login" className="hover:underline">Log In</Link>
+            <Link to="/signup" className="hover:underline">Sign Up</Link>
+          </>
+        )}
+        {user && (
+          <>
+            <span className="mr-2">{user.name}</span>
+            <button onClick={onLogout} className="hover:underline text-red-400">Log Out</button>
+          </>
+        )}
       </div>
     </nav>
   );

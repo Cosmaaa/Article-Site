@@ -1,0 +1,17 @@
+[
+    {
+      "author": "Test Author 1",
+      "title": "Test Article One",
+      "content": "This is a test article number one. Lorem ipsum dolor sit amet.",
+      "category": "Test",
+      "date": "2025-04-21T12:00:00Z"
+    },
+    {
+      "author": "Test Author 2",
+      "title": "Test Article Two",
+      "content": "This is a test article number two. Consectetur adipiscing elit.",
+      "category": "Test",
+      "date": "2025-04-20T09:30:00Z"
+    }
+  ]
+  

@@ -3,11 +3,12 @@ import axios from "axios";
 import Navbar from "./components/Navbar";
 import SignUpForm from "./components/SignUpForm";
 import LogInForm from "./components/LogInForm";
+import Home from "./components/Home";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,52 +32,18 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
-    setShowLogin(false);
-    setShowSignup(false);
-  };
-
-  const handleShowLogin = () => {
-    setShowLogin(true);
-    setShowSignup(false);
-  };
-
-  const handleShowSignup = () => {
-    setShowSignup(true);
-    setShowLogin(false);
+    navigate("/login");
   };
 
   return (
     <div>
-      <Navbar
-        user={user}
-        onLogout={handleLogout}
-        onShowLogin={handleShowLogin}
-        onShowSignup={handleShowSignup}
-      />
-
-      <div className="p-4">
-        <h1 className="text-2xl text-blue-500">
-          {user ? `Welcome back, ${user.name}!` : "Welcome to the main page!"}
-        </h1>
-      </div>
-
-      {showLogin && (
-        <LogInForm
-          onLoginSuccess={(user) => {
-            setUser(user);
-            setShowLogin(false);
-          }}
-        />
-      )}
-
-      {showSignup && (
-        <SignUpForm
-          onSignupSuccess={(user) => {
-            setUser(user);
-            setShowSignup(false);
-          }}
-        />
-      )}
+      <Navbar user={user} onLogout={handleLogout} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/toate" />} />
+        <Route path="/login" element={<LogInForm onLoginSuccess={setUser} />} />
+        <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/:category" element={<Home />} />
+      </Routes>
     </div>
   );
 }
