@@ -1,21 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FaBook, FaCog } from "react-icons/fa";
 
-const Navbar = ({ user, onLogout }) => {
+export default function Navbar({ user, onLogout }) {
   return (
-    <nav className="bg-gray-800 text-white px-4 py-3 flex items-center justify-between">
-      {/* Stânga - Home */}
-      <div className="flex-1">
-        <Link to="/" className="hover:underline font-semibold">Home</Link>
+    <nav className="bg-green-600 text-black px-6 py-3 flex items-center relative">
+      {/* Stânga: carte + Home */}
+      <div className="flex items-center gap-3">
+        <FaBook className="text-xl" />
+        <Link to="/" className="font-semibold hover:underline">Home</Link>
       </div>
 
-      {/* Mijloc - Articles */}
-      <div className="flex-1 text-center">
-        <Link to="/articles" className="hover:underline font-semibold">Articles</Link>
+      {/* Centru: Articles */}
+      <div className="absolute left-1/2 transform -translate-x-1/2">
+        <Link to="/articles" className="font-semibold hover:underline">Articles</Link>
       </div>
 
-      {/* Dreapta - Auth */}
-      <div className="flex-1 text-right space-x-4">
+      {/* Dreapta: Auth + Settings */}
+      <div className="ml-auto flex items-center gap-4">
         {!user && (
           <>
             <Link to="/login" className="hover:underline">Log In</Link>
@@ -24,13 +26,14 @@ const Navbar = ({ user, onLogout }) => {
         )}
         {user && (
           <>
-            <span className="mr-2">{user.name}</span>
-            <button onClick={onLogout} className="hover:underline text-red-400">Log Out</button>
+            <span className="mr-2"> {user.name}</span>
+            <button onClick={onLogout} className="hover:underline text-red-700">Log Out</button>
           </>
         )}
+        <button className="p-1 hover:bg-green-500 rounded" title="Settings">
+          <FaCog />
+        </button>
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
