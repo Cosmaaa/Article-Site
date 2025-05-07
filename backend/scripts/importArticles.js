@@ -1,9 +1,8 @@
-// backend/importArticles.js
 import mongoose from 'mongoose';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
-import Article from './models/Article.js';
+import Article from '../models/Article.js';
 
 dotenv.config();
 
@@ -14,14 +13,14 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true
 })
 .then(async () => {
-  console.log("✅ Connected to MongoDB");
+  console.log(" Connected to MongoDB");
   const articles = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   await Article.deleteMany();
   await Article.insertMany(articles);
-  console.log(`✅ Imported ${articles.length} articles`);
+  console.log(` Imported ${articles.length} articles`);
   process.exit();
 })
 .catch(err => {
-  console.error("❌ MongoDB connection error:", err);
+  console.error(" MongoDB connection error:", err);
   process.exit(1);
 });
