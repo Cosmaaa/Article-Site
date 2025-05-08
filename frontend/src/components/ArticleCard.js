@@ -1,27 +1,63 @@
-import React from "react";
-import { FaInfoCircle, FaThumbsUp, FaThumbsDown, FaHeart } from "react-icons/fa";
+import React, { useState } from "react";
+import {
+  FaInfoCircle,
+  FaThumbsUp,
+  FaThumbsDown,
+  FaRegComment,
+  FaHeart,
+  FaTimes,
+} from "react-icons/fa";
 
-const ArticleCard = ({ article }) => {
+export default function ArticleCard({ article }) {
+  const [expanded, setExpanded] = useState(false);
+
+  
+  const preview = article.content.length > 200
+    ? article.content.slice(0, 200) + "..."
+    : article.content;
+
   return (
-    <div className="w-full max-w-2xl bg-green-200 rounded-xl p-6 shadow-md">
+    <div className="w-full max-w-2xl bg-green-200 rounded-xl p-6 shadow-md relative">
       <div className="flex items-start gap-3 mb-4">
         <FaInfoCircle className="text-2xl mt-1" />
-        <div>
+        <div className="flex-1">
           <h2 className="text-2xl font-bold text-gray-900">{article.title}</h2>
-          <p className="text-gray-700 mt-2">{article.content}</p>
-          <span className="text-sm text-gray-500 italic">Categorie: {article.category}</span>
+          <p className="text-gray-600 text-sm mt-1">
+            Published: {new Date(article.date).toLocaleDateString()} | Author:{" "}
+            {article.author}
+          </p>
         </div>
+        {expanded && (
+          <button
+            onClick={() => setExpanded(false)}
+            className="text-gray-700 hover:text-black"
+          >
+            <FaTimes />
+          </button>
+        )}
       </div>
-      <div className="flex justify-between items-center">
-        <button className="bg-white border border-gray-400 rounded px-4 py-1 hover:bg-gray-100">Read More</button>
+
+      
+      <p className="text-gray-800 mb-4">
+        {expanded ? article.content : preview}
+      </p>
+
+     
+      {!expanded ? (
+        <button
+          onClick={() => setExpanded(true)}
+          className="mb-4 bg-white border border-gray-400 rounded px-4 py-1 hover:bg-gray-100"
+        >
+          Read More
+        </button>
+      ) : (
         <div className="flex gap-4 text-xl text-gray-700">
           <FaThumbsUp className="cursor-pointer hover:text-black" />
           <FaThumbsDown className="cursor-pointer hover:text-black" />
+          <FaRegComment className="cursor-pointer hover:text-black" />
           <FaHeart className="cursor-pointer hover:text-red-500" />
         </div>
-      </div>
+      )}
     </div>
   );
-};
-
-export default ArticleCard;
+}

@@ -5,18 +5,18 @@ import { FaBook, FaCog } from "react-icons/fa";
 export default function Navbar({ user, onLogout }) {
   return (
     <nav className="bg-green-600 text-black px-6 py-3 flex items-center relative">
-      {/* Stânga: carte + Home */}
+    
       <div className="flex items-center gap-3">
         <FaBook className="text-xl" />
         <Link to="/" className="font-semibold hover:underline">Home</Link>
       </div>
 
-      {/* Centru: Articles */}
+      
       <div className="absolute left-1/2 transform -translate-x-1/2">
         <Link to="/articles" className="font-semibold hover:underline">Articles</Link>
       </div>
 
-      {/* Dreapta: Auth + Settings */}
+      
       <div className="ml-auto flex items-center gap-4">
         {!user && (
           <>
