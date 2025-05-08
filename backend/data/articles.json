@@ -4,69 +4,79 @@
     "title": "Secretele antrenamentelor de dimineață",
     "content": "Un antrenament scurt de 20 de minute dimineața îți poate crește nivelul de energie și concentrare pe tot parcursul zilei. În acest articol vom explora exerciții simple pe care le poți face acasă, fără echipament special.",
     "category": "sport",
-    "date": "2025-05-01T07:30:00Z"
+    "date": "2025-05-01T07:30:00Z",
+    "comments": []
   },
   {
     "author": "Mihai Ionescu",
     "title": "Ultimele descoperiri în tehnologia bateriilor",
     "content": "O echipă de cercetători a anunțat o baterie litiu‑sulfur cu densitate energetică dublă față de modelele actuale. Aceasta promite autonomie mai mare pentru vehicule electrice și gadgeturi portabile.",
-    "category": "tehnologie",
-    "date": "2025-04-28T12:15:00Z"
+    "category": "tech",
+    "date": "2025-04-28T12:15:00Z",
+    "comments": []
   },
   {
-    "author": "Adriana Marinescu",  
+    "author": "Adriana Marinescu",
     "title": "Eveniment cultural: Festivalul de teatru din Cluj",
     "content": "Festivalul internațional de teatru din Cluj aduce anul acesta peste 50 de reprezentații din 12 țări. Află programul spectacolelor și cum poți achiziționa bilete la preț redus.",
-    "category": "cultura",
-    "date": "2025-04-20T18:00:00Z"
+    "category": "latest",
+    "date": "2025-04-20T18:00:00Z",
+    "comments": []
   },
   {
     "author": "George Stan",
     "title": "Piața criptomonedelor: ce urmează în 2025?",
     "content": "După volatilitatea din primul trimestru, experții estimează o stabilizare a bitcoin și ethereum. Analizăm trendurile macroeconomice și impactul reglementărilor din UE.",
-    "category": "economie",
-    "date": "2025-03-15T09:45:00Z"
+    "category": "lifestyle",
+    "date": "2025-03-15T09:45:00Z",
+    "comments": []
   },
   {
     "author": "Elena Radu",
     "title": "10 rețete rapide pentru prânzul de acasă",
     "content": "Fie că lucrezi remote sau ești acasă, aceste rețete sănătoase și gustoase se prepară în maxim 30 de minute. Încadrează‑le în planul tău alimentar echilibrat.",
     "category": "lifestyle",
-    "date": "2025-02-10T11:20:00Z"
+    "date": "2025-02-10T11:20:00Z",
+    "comments": []
   },
   {
     "author": "Andrei Popa",
     "title": "Cum să-ți protejezi datele online",
     "content": "Amenințările cibernetice sunt în continuă creștere. Iată cele mai bune practici de securitate: parole puternice, autentificare multi-factor și VPN.",
-    "category": "tehnologie",
-    "date": "2025-01-30T14:00:00Z"
+    "category": "tech",
+    "date": "2025-01-30T14:00:00Z",
+    "comments": []
   },
   {
     "author": "Maria Georgescu",
     "title": "Jocurile Olimpice 2028: pregătiri și așteptări",
     "content": "Organizatorii din Los Angeles anunță construcția a trei noi arene și modernizarea stadionului principal. Vom vedea noi sporturi și tehnologii de transmisiune live.",
     "category": "sport",
-    "date": "2025-04-05T16:30:00Z"
+    "date": "2025-04-05T16:30:00Z",
+    "comments": []
   },
   {
     "author": "Cristian Matei",
     "title": "Impactul inteligenței artificiale în educație",
     "content": "Platformele adaptive de învățare bazate pe AI pot personaliza lecțiile pentru fiecare elev. Discutăm avantajele și riscurile implementării pe scară largă.",
-    "category": "tehnologie",
-    "date": "2025-03-22T10:10:00Z"
+    "category": "tech",
+    "date": "2025-03-22T10:10:00Z",
+    "comments": []
   },
   {
     "author": "Laura Petrescu",
     "title": "Ultimele știri despre sănătate publică",
     "content": "Organizația Mondială a Sănătății a actualizat ghidurile pentru prevenirea gripei sezoniere. Află ce măsuri simple poți lua pentru a-ți proteja familia.",
-    "category": "sanatate",
-    "date": "2025-04-12T08:00:00Z"
+    "category": "latest",
+    "date": "2025-04-12T08:00:00Z",
+    "comments": []
   },
   {
     "author": "Bogdan Ilie",
     "title": "Turism sustenabil: destinații eco-friendly",
     "content": "Descoperă cinci destinații din România care pun accent pe turism verde: trasee montane, pensiuni eco și proiecte comunitare de mediu.",
-    "category": "calatorii",
-    "date": "2025-02-25T13:50:00Z"
+    "category": "latest",
+    "date": "2025-02-25T13:50:00Z",
+    "comments": []
   }
 ]

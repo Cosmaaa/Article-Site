@@ -3,19 +3,26 @@ import {
   FaInfoCircle,
   FaThumbsUp,
   FaThumbsDown,
-  FaRegComment,
+  FaComment,
   FaHeart,
   FaTimes,
 } from "react-icons/fa";
+import CommentsSection from "./CommentsSection";
 
 export default function ArticleCard({ article }) {
   const [expanded, setExpanded] = useState(false);
+  const [showCommentInput, setShowCommentInput] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
-  
-  const preview = article.content.length > 200
-    ? article.content.slice(0, 200) + "..."
-    : article.content;
+  const preview =
+    article.content.length > 200
+      ? article.content.slice(0, 200) + "..."
+      : article.content;
 
+      const handlePostComplete = () => {
+        setShowCommentInput(false);
+        setShowComments(true);
+      };
   return (
     <div className="w-full max-w-2xl bg-green-200 rounded-xl p-6 shadow-md relative">
       <div className="flex items-start gap-3 mb-4">
@@ -37,27 +44,40 @@ export default function ArticleCard({ article }) {
         )}
       </div>
 
-      
       <p className="text-gray-800 mb-4">
         {expanded ? article.content : preview}
       </p>
 
-     
-      {!expanded ? (
-        <button
-          onClick={() => setExpanded(true)}
-          className="mb-4 bg-white border border-gray-400 rounded px-4 py-1 hover:bg-gray-100"
-        >
-          Read More
-        </button>
-      ) : (
-        <div className="flex gap-4 text-xl text-gray-700">
-          <FaThumbsUp className="cursor-pointer hover:text-black" />
-          <FaThumbsDown className="cursor-pointer hover:text-black" />
-          <FaRegComment className="cursor-pointer hover:text-black" />
-          <FaHeart className="cursor-pointer hover:text-red-500" />
-        </div>
-      )}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="mb-4 bg-white border border-gray-400 rounded px-4 py-1 hover:bg-gray-100"
+      >
+        {expanded ? "Show Less" : "Read More"}
+      </button>
+
+      <div className="flex gap-4 text-xl text-gray-700 mb-2">
+        <FaThumbsUp className="cursor-pointer hover:text-black" />
+        <FaThumbsDown className="cursor-pointer hover:text-black" />
+        <FaComment
+          className="cursor-pointer hover:text-black"
+          onClick={() => {
+            setShowCommentInput(true);
+            setShowComments(false);
+          }}
+        />
+        <FaHeart className="cursor-pointer hover:text-red-500" />
+      </div>
+
+      <CommentsSection
+        articleId={article._id}
+        showInput={showCommentInput}
+        onPostComplete={handlePostComplete}
+        showOnlyComments={showComments}
+        onToggleComments={() => {
+          setShowComments(!showComments);
+          setShowCommentInput(false);
+        }}
+      />
     </div>
   );
 }
