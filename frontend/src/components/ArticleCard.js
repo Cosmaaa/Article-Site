@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import CommentsSection from "./CommentsSection";
 
-export default function ArticleCard({ article }) {
+export default function ArticleCard({ article, user }) {
   const [expanded, setExpanded] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [showComments, setShowComments] = useState(false);
@@ -19,10 +19,11 @@ export default function ArticleCard({ article }) {
       ? article.content.slice(0, 200) + "..."
       : article.content;
 
-      const handlePostComplete = () => {
-        setShowCommentInput(false);
-        setShowComments(true);
-      };
+  const handlePostComplete = () => {
+    setShowCommentInput(false);
+    setShowComments(true);
+  };
+
   return (
     <div className="w-full max-w-2xl bg-green-200 rounded-xl p-6 shadow-md relative">
       <div className="flex items-start gap-3 mb-4">
@@ -77,6 +78,7 @@ export default function ArticleCard({ article }) {
           setShowComments(!showComments);
           setShowCommentInput(false);
         }}
+        user={user}
       />
     </div>
   );

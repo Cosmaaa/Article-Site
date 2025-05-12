@@ -11,7 +11,6 @@ export default function Home({ user }) {
   const { category } = useParams();
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/articles")
@@ -19,7 +18,6 @@ export default function Home({ user }) {
       .catch(console.error);
   }, []);
 
-  
   useEffect(() => {
     if (!category || category === "toate") {
       setFiltered(articles);
@@ -54,7 +52,7 @@ export default function Home({ user }) {
         ) : (
           <div className="flex flex-col items-center gap-6 mt-8">
             {filtered.map((a) => (
-              <ArticleCard key={a._id} article={a} />
+              <ArticleCard key={a._id} article={a} user={user} />
             ))}
           </div>
         )}
