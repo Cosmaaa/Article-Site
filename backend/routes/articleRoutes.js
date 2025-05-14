@@ -89,6 +89,7 @@ router.delete("/:id/comments/:commentId", authenticateToken, async (req, res) =>
 
 
 
+
 router.post("/:id/react", authenticateToken, async (req, res) => {
   const { id }   = req.params;
   const { type } = req.body;           
@@ -98,22 +99,35 @@ router.post("/:id/react", authenticateToken, async (req, res) => {
     return res.status(400).json({ message: "Invalid reaction type" });
   }
 
-  const field = type === "like"
-    ? "likes"
-    : type === "dislike"
-      ? "dislikes"
-      : "hearts";
-
   try {
     const art = await Article.findById(id);
     if (!art) return res.status(404).json({ message: "Article not found" });
 
     
-    const idx = art[field].findIndex(uid => uid.toString() === userId);
-    if (idx > -1) {
-      art[field].splice(idx, 1);
-    } else {
-      art[field].push(userId);
+    if (type === "dislike") {
+      art.likes    = [];
+      art.hearts   = [];
+      art.dislikes = Array.from(new Set([userId, ...art.dislikes]));
+    }
+    
+    else if (type === "like") {
+      art.dislikes = art.dislikes.filter(uid => uid.toString() !== userId);
+      const already = art.likes.some(uid => uid.toString() === userId);
+      if (already) {
+        art.likes = art.likes.filter(uid => uid.toString() !== userId);
+      } else {
+        art.likes.push(userId);
+      }
+    }
+    
+    else if (type === "heart") {
+      art.dislikes = art.dislikes.filter(uid => uid.toString() !== userId);
+      const already = art.hearts.some(uid => uid.toString() === userId);
+      if (already) {
+        art.hearts = art.hearts.filter(uid => uid.toString() !== userId);
+      } else {
+        art.hearts.push(userId);
+      }
     }
 
     await art.save();
@@ -123,16 +137,18 @@ router.post("/:id/react", authenticateToken, async (req, res) => {
       dislikes: art.dislikes.length,
       hearts:   art.hearts.length,
       myReactions: {
-        liked:    art.likes.includes(userId),
-        disliked: art.dislikes.includes(userId),
-        hearted:  art.hearts.includes(userId),
+        liked:    art.likes.some(uid => uid.toString() === userId),
+        disliked: art.dislikes.some(uid => uid.toString() === userId),
+        hearted:  art.hearts.some(uid => uid.toString() === userId),
       }
     });
   } catch (err) {
-    console.error(err);
+    console.error("Error in POST /api/articles/:id/react:", err);
     return res.status(500).json({ message: "Server error" });
   }
 });
+
+
 
 
 
