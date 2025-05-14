@@ -33,7 +33,6 @@ export default function Home({ user }) {
   return (
     <div className="flex bg-green-100 min-h-screen pt-4">
       <CategorySideBar />
-
       <div className="flex-grow relative px-6">
         {isLoggedIn && (
           <button
@@ -44,7 +43,6 @@ export default function Home({ user }) {
             <FaPen className="w-5 h-5" />
           </button>
         )}
-
         {filtered.length === 0 ? (
           <p className="text-gray-600 text-xl mt-20 text-center">
             Nu există articole în această categorie.

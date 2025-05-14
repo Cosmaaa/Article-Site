@@ -1,5 +1,6 @@
 import express from "express";
 import Article from "../models/Article.js";
+import {authenticateToken} from "../middleware/authMiddleware.js"
 
 const router = express.Router();
 
@@ -53,24 +54,86 @@ router.post("/:id/comments", async (req, res) => {
 });
 
 
-router.delete("/:id/comments/:commentId", async (req, res) => {
+
+router.delete("/:id/comments/:commentId", authenticateToken, async (req, res) => {
+  const { id, commentId } = req.params;
   try {
-    const { id, commentId } = req.params;
+    
     const article = await Article.findById(id);
-    if (!article) return res.status(404).json({ message: "Article not found" });
-
-    const idx = article.comments.findIndex(c => c._id.toString() === commentId);
-    if (idx === -1) return res.status(404).json({ message: "Comment not found" });
-
-    article.comments.splice(idx, 1);
-    await article.save();
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
 
     
-    res.json(article.comments);
+    const comment = article.comments.find(c => c._id.toString() === commentId);
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    if (comment.authorId.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "Not your comment" });
+    }
+
+    
+    await Article.findByIdAndUpdate(id, {
+      $pull: { comments: { _id: commentId } }
+    });
+
+    
+    const updated = await Article.findById(id);
+    return res.json(updated.comments);
   } catch (err) {
-    console.error("Error in DELETE /api/articles/:id/comments/:commentId", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in DELETE /api/articles/:id/comments/:commentId:", err);
+    return res.status(500).json({ message: "Server error", error: err.message });
   }
 });
+
+
+
+router.post("/:id/react", authenticateToken, async (req, res) => {
+  const { id }   = req.params;
+  const { type } = req.body;           
+  const userId   = req.user.userId;    
+
+  if (!["like","dislike","heart"].includes(type)) {
+    return res.status(400).json({ message: "Invalid reaction type" });
+  }
+
+  const field = type === "like"
+    ? "likes"
+    : type === "dislike"
+      ? "dislikes"
+      : "hearts";
+
+  try {
+    const art = await Article.findById(id);
+    if (!art) return res.status(404).json({ message: "Article not found" });
+
+    
+    const idx = art[field].findIndex(uid => uid.toString() === userId);
+    if (idx > -1) {
+      art[field].splice(idx, 1);
+    } else {
+      art[field].push(userId);
+    }
+
+    await art.save();
+
+    return res.json({
+      likes:    art.likes.length,
+      dislikes: art.dislikes.length,
+      hearts:   art.hearts.length,
+      myReactions: {
+        liked:    art.likes.includes(userId),
+        disliked: art.dislikes.includes(userId),
+        hearted:  art.hearts.includes(userId),
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 export default router;

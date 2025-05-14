@@ -4,40 +4,48 @@ import { FaTrash } from "react-icons/fa";
 
 export default function CommentsSection({
   articleId,
+  user,
   showInput,
   onPostComplete,
   showOnlyComments,
   onToggleComments,
-  user,
 }) {
   const [comments, setComments] = useState([]);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
-
   const BASE = "http://localhost:5000/api/articles";
 
   const fetchComments = useCallback(async () => {
     try {
       const res = await axios.get(`${BASE}/${articleId}/comments`);
-      setComments(Array.isArray(res.data) ? res.data : []);
+      // Eliminăm elementele null
+      const filtered = Array.isArray(res.data)
+        ? res.data.filter((c) => c !== null)
+        : [];
+      setComments(filtered);
     } catch (err) {
       console.error("Error fetching comments:", err);
       setComments([]);
     }
   }, [articleId]);
 
-  useEffect(() => { fetchComments(); }, [fetchComments]);
-  useEffect(() => { if (showOnlyComments) fetchComments(); }, [showOnlyComments, fetchComments]);
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments]);
+
+  useEffect(() => {
+    if (showOnlyComments) fetchComments();
+  }, [showOnlyComments, fetchComments]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const text = e.target.comment.value.trim();
-    if (!text) return;
+    if (!text || !user) return;
     try {
-      await axios.post(`${BASE}/${articleId}/comments`, {
-        author: user.username,
-        authorId: user._id,
-        text,
-      });
+      await axios.post(
+        `${BASE}/${articleId}/comments`,
+        { author: user.name || "Anonymous", authorId: user._id, text },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
       e.target.reset();
       await fetchComments();
       onPostComplete?.();
@@ -47,17 +55,15 @@ export default function CommentsSection({
     }
   };
 
-  const confirmDelete = (id) => {
-    setPendingDeleteId(id);
-  };
-
-  const cancelDelete = () => {
-    setPendingDeleteId(null);
-  };
+  const confirmDelete = (id) => setPendingDeleteId(id);
+  const cancelDelete  = () => setPendingDeleteId(null);
 
   const doDelete = async (id) => {
     try {
-      await axios.delete(`${BASE}/${articleId}/comments/${id}`);
+      await axios.delete(
+        `${BASE}/${articleId}/comments/${id}`,
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+      );
       setPendingDeleteId(null);
       await fetchComments();
     } catch (err) {
@@ -74,9 +80,7 @@ export default function CommentsSection({
       >
         {showOnlyComments
           ? "Ascunde comentarii"
-          : `${comments.length} ${
-              comments.length === 1 ? "comentariu" : "comentarii"
-            }`}
+          : `${comments.length} ${comments.length === 1 ? "comentariu" : "comentarii"}`}
       </div>
 
       {showOnlyComments && (
@@ -86,7 +90,7 @@ export default function CommentsSection({
               <div className="flex justify-between items-center">
                 <span className="font-semibold">{c.author}</span>
 
-                {c.authorId === user._id && (
+                {user && c.authorId === user._id && (
                   pendingDeleteId === c._id ? (
                     <div className="flex gap-2">
                       <button
@@ -123,7 +127,7 @@ export default function CommentsSection({
         </ul>
       )}
 
-      {showInput && (
+      {showInput && user && (
         <form onSubmit={handleSubmit} className="flex gap-2 mt-2">
           <input
             name="comment"
