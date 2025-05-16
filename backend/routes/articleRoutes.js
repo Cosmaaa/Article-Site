@@ -149,6 +149,40 @@ router.post("/:id/react", authenticateToken, async (req, res) => {
 });
 
 
+router.post(
+  "/",
+  authenticateToken,              // only logged-in users can publish
+  async (req, res) => {
+    try {
+      const { title, content, category } = req.body;
+      if (!title || !content || !category) {
+        return res
+          .status(400)
+          .json({ message: "Title, content and category are required" });
+      }
+      // assume your JWT payload had userId + name/email
+      const authorId = req.user.userId;
+      const authorName = req.user.name; 
+      // if you only store userId in token, you can fetch the user model here
+      const newArticle = new Article({
+        author: authorName || "Anonymous",
+        authorId,
+        title,
+        content,
+        category,
+        date: new Date(),
+      });
+      await newArticle.save();
+      res.status(201).json(newArticle);
+    } catch (err) {
+      console.error("Error in POST /api/articles:", err);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
+
+
 
 
 

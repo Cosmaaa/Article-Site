@@ -14,7 +14,9 @@ const mongoURI = process.env.MONGO_URI;
 
 const corsOptions = {
   origin: "http://localhost:3000", 
-  credentials: true,               
+  credentials: true,
+  methods: ["GET","POST","DELETE","PUT","PATCH","OPTIONS"],
+    allowedHeaders: ["Content-Type","Authorization"],               
 };
 
 app.use(cors(corsOptions));
