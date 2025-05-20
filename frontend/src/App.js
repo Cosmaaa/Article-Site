@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import SignUpForm from "./components/SignUpForm";
@@ -6,6 +6,7 @@ import LogInForm from "./components/LogInForm";
 import Home from "./components/Home";
 import PublishForm from "./components/PublishForm";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import Footer from "./components/Footer";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -42,6 +43,7 @@ function App() {
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/:category" element={<Home user={user} />} />
       </Routes>
+      <Footer />
     </div>
   );
 }
