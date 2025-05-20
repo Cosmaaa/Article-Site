@@ -20,6 +20,10 @@ const articleSchema = new mongoose.Schema({
       date:     { type: Date, default: Date.now },
     },
   ],
+   imageUrl: {
+    type: String,
+    default: null
+  }
 });
 
 export default mongoose.model("Article", articleSchema);

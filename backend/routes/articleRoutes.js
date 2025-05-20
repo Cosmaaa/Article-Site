@@ -5,6 +5,7 @@ import {authenticateToken} from "../middleware/authMiddleware.js"
 const router = express.Router();
 
 
+
 router.get("/", async (req, res) => {
   try {
     const articles = await Article.find().sort({ date: -1 });
