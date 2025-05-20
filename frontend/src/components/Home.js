@@ -4,7 +4,8 @@ import ArticleCard from "./ArticleCard";
 import CategorySideBar from "./CategorySideBar";
 import { FaPen } from "react-icons/fa";
 import axios from "axios";
-import newsPaper from "../assets/newspaper.jpg"
+import bgPattern from "../assets/background.jpg";
+import newsPaper from "../assets/newspaper.jpg";
 
 export default function Home({ user }) {
   const [articles, setArticles] = useState([]);
@@ -39,7 +40,7 @@ export default function Home({ user }) {
       
       <div className="relative w-full h-40">
         <img
-          src={newsPaper}    
+          src={newsPaper}
           alt={title}
           className="w-full h-full object-cover"
         />
@@ -51,7 +52,10 @@ export default function Home({ user }) {
       </div>
 
       
-      <div className="flex bg-green-100 min-h-screen">
+      <div
+        className="flex min-h-screen bg-cover bg-center"
+        style={{ backgroundImage: `url(${bgPattern})` }}
+      >
         <CategorySideBar />
         <div className="flex-grow relative px-6 pt-8">
           {isLoggedIn && (
@@ -65,7 +69,7 @@ export default function Home({ user }) {
           )}
 
           {filtered.length === 0 ? (
-            <p className="text-gray-600 text-xl mt-20 text-center">
+            <p className="text-gray-200 text-xl mt-20 text-center">
               Nu există articole în această categorie.
             </p>
           ) : (
