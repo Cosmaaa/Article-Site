@@ -17,7 +17,7 @@ export default function CommentsSection({
   const fetchComments = useCallback(async () => {
     try {
       const res = await axios.get(`${BASE}/${articleId}/comments`);
-      // Eliminăm elementele null
+     
       const filtered = Array.isArray(res.data)
         ? res.data.filter((c) => c !== null)
         : [];

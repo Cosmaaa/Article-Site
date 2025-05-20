@@ -4,6 +4,7 @@ import ArticleCard from "./ArticleCard";
 import CategorySideBar from "./CategorySideBar";
 import { FaPen } from "react-icons/fa";
 import axios from "axios";
+import newsPaper from "../assets/newspaper.jpg"
 
 export default function Home({ user }) {
   const [articles, setArticles] = useState([]);
@@ -29,32 +30,53 @@ export default function Home({ user }) {
   }, [category, articles]);
 
   const isLoggedIn = Boolean(user);
+  const title = category
+    ? category.charAt(0).toUpperCase() + category.slice(1)
+    : "All Articles";
 
   return (
-    <div className="flex bg-green-100 min-h-screen pt-4">
-      <CategorySideBar />
-      <div className="flex-grow relative px-6">
-        {isLoggedIn && (
-          <button
-            onClick={() => navigate("/publish")}
-            className="absolute top-0 right-0 mt-2 mr-2 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg"
-            title="Publish Article"
-          >
-            <FaPen className="w-5 h-5" />
-          </button>
-        )}
-        {filtered.length === 0 ? (
-          <p className="text-gray-600 text-xl mt-20 text-center">
-            Nu există articole în această categorie.
-          </p>
-        ) : (
-          <div className="flex flex-col items-center gap-6 mt-8">
-            {filtered.map((a) => (
-              <ArticleCard key={a._id} article={a} user={user} />
-            ))}
-          </div>
-        )}
+    <>
+      
+      <div className="relative w-full h-40">
+        <img
+          src={newsPaper}    
+          alt={title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+          <h1 className="text-white text-5xl font-semibold uppercase tracking-normal drop-shadow-lg">
+            {title}
+          </h1>
+        </div>
       </div>
-    </div>
+
+      
+      <div className="flex bg-green-100 min-h-screen">
+        <CategorySideBar />
+        <div className="flex-grow relative px-6 pt-8">
+          {isLoggedIn && (
+            <button
+              onClick={() => navigate("/publish")}
+              className="absolute top-0 right-0 mt-2 mr-2 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg"
+              title="Publish Article"
+            >
+              <FaPen className="w-5 h-5" />
+            </button>
+          )}
+
+          {filtered.length === 0 ? (
+            <p className="text-gray-600 text-xl mt-20 text-center">
+              Nu există articole în această categorie.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {filtered.map((a) => (
+                <ArticleCard key={a._id} article={a} user={user} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
   );
 }
