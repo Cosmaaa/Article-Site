@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArticleCard from "./ArticleCard";
 import CategorySideBar from "./CategorySideBar";
-import { FaPen } from "react-icons/fa";
+import pen from "../assets/pen.svg"
 import axios from "axios";
 import bgPattern from "../assets/background.jpg";
 import newsPaper from "../assets/newspaper.jpg";
@@ -49,6 +49,16 @@ export default function Home({ user }) {
             {title}
           </h1>
         </div>
+
+         {isLoggedIn && (
+            <button
+              onClick={() => navigate("/publish")}
+              className="absolute top-6 right-8 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-xl"
+              title="Publish Article"
+            >
+              <img src={pen} alt={title} className="w-[60px] h-[60px]"/>
+            </button>
+          )}
       </div>
 
       
@@ -58,15 +68,7 @@ export default function Home({ user }) {
       >
         <CategorySideBar />
         <div className="flex-grow relative px-6 pt-8">
-          {isLoggedIn && (
-            <button
-              onClick={() => navigate("/publish")}
-              className="absolute top-0 right-0 mt-2 mr-2 bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg"
-              title="Publish Article"
-            >
-              <FaPen className="w-5 h-5" />
-            </button>
-          )}
+         
 
           {filtered.length === 0 ? (
             <p className="text-gray-200 text-xl mt-20 text-center">
