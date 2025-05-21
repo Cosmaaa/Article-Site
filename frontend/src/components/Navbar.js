@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaCog, FaChevronDown } from "react-icons/fa";
 import logo from "../assets/logo.svg"; 
+import userIcon from "../assets/user.svg";
 
 const categories = [
   { label: "All Articles", path: "/" },
@@ -16,9 +17,9 @@ export default function Navbar({ user, onLogout }) {
   return (
     <nav className="bg-blue-600 text-white px-8 py-4 flex items-center shadow-lg relative">
       
-      <Link to="/" className="flex items-center gap-2">
-        <img src={logo} alt="Logo" className="h-10 w-10" />
-        <span className="text-2xl font-bold">HOTNEWS</span>
+      <Link to="/" className="flex items-center gap-3">
+      <img src={logo} alt="Logo" className="h-12 w-12" />
+        <span className="text-3xl font-bold">HOTNEWS</span>
       </Link>
 
       
@@ -75,6 +76,11 @@ export default function Navbar({ user, onLogout }) {
         </div>
       ) : (
         <div className="flex items-center gap-4">
+            <img
+              src={userIcon}
+              alt="User icon"
+              className="w-10 h-10 filter invert"
+            />
           <span className="px-3 py-1 bg-blue-500 rounded-md">{user.name}</span>
           <button
             onClick={onLogout}
