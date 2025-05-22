@@ -162,8 +162,8 @@ router.post(
           .json({ message: "Title, content and category are required" });
       }
       const authorId = req.user.userId;
-      const authorName = req.user.name; 
-      const newArticle = new Article({
+      const authorName = req.user.username; 
+      const newArticle = new Article({  
         author: authorName || "Anonymous",
         authorId,
         title,
@@ -179,9 +179,6 @@ router.post(
     }
   }
 );
-
-
-
 
 
 

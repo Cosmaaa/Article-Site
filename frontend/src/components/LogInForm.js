@@ -1,42 +1,67 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const LogInForm = ({ onLoginSuccess }) => {
+export default function LogInForm({ onLoginSuccess }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // resetare eroare
-
+    setError("");
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", formData);
-      const { token, user } = response.data;
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData
+      );
+      const { token, user } = res.data;
       localStorage.setItem("token", token);
       onLoginSuccess(user);
-      navigate("/"); // după login cu succes
-    } catch (error) {
-      console.error("Login error:", error);
+    } catch (err) {
+      console.error(err);
       setError("Email sau parolă incorecte.");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded">
-      <h2 className="text-xl font-semibold mb-4">Log In</h2>
-      {error && <div className="text-red-600 mb-2">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <input name="email" type="email" placeholder="Email" required onChange={handleChange} className="w-full p-2 mb-2 border rounded" />
-        <input name="password" type="password" placeholder="Password" required onChange={handleChange} className="w-full p-2 mb-2 border rounded" />
-        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Log In</button>
-      </form>
-    </div>
-  );
-};
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {error && <div className="text-red-600">{error}</div>}
 
-export default LogInForm;
+      <input
+        name="email"
+        type="email"
+        placeholder="Email"
+        required
+        onChange={handleChange}
+        className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white"
+      />
+
+      <div className="relative">
+        <input
+          name="password"
+          type={showPassword ? "text" : "password"}
+          placeholder="Password"
+          required
+          onChange={handleChange}
+          className="w-full p-2 border rounded bg-gray-100 dark:bg-gray-700 dark:text-white pr-10"
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute right-2 top-2 text-gray-600 dark:text-gray-300"
+          aria-label="Toggle password visibility"
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+      </div>
+
+      <button className="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition">
+        Log In
+      </button>
+    </form>
+  );
+}

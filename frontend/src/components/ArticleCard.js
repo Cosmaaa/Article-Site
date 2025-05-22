@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo} from "react";
 import axios from "axios";
 import {
   FaInfoCircle,
@@ -6,16 +6,17 @@ import {
   FaThumbsDown,
   FaComment,
   FaHeart,
-  
 } from "react-icons/fa";
 import CommentsSection from "./CommentsSection";
 import placeholderImg from "../assets/placeholder.jpg";
+
 
 export default function ArticleCard({ article, user }) {
   const [expanded, setExpanded] = useState(false);
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [showComments, setShowComments] = useState(false);
-  
+ 
+
   const likesArr = useMemo(
     () => (Array.isArray(article.likes) ? article.likes : []),
     [article.likes]
@@ -67,9 +68,8 @@ export default function ArticleCard({ article, user }) {
   return (
     <div
       onClick={() => setExpanded(!expanded)}
-      className="group cursor-pointer bg-white rounded-xl overflow-hidden shadow transition-transform hover:scale-[1.02] hover:shadow-lg"
+      className={`group cursor-pointer bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow transition-transform hover:scale-[1.02] hover:shadow-lg`}
     >
-      
       <div className="h-48 w-full overflow-hidden">
         <img
           src={article.imageUrl || placeholderImg}
@@ -78,39 +78,32 @@ export default function ArticleCard({ article, user }) {
         />
       </div>
 
-      
       <div className="p-4 flex flex-col">
-        
-        <div className="flex items-center text-sm text-gray-500 mb-1">
+        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-1">
           <FaInfoCircle className="mr-1" />
           <span className="uppercase">{article.category || "General"}</span>
           <span className="mx-2">•</span>
           <span>{new Date(article.date).toLocaleDateString()}</span>
         </div>
 
-        
-        <h2 className="text-lg font-semibold text-gray-900 mb-2">{article.title}</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">{article.title}</h2>
 
-        
-        <p className="text-sm text-gray-600 mb-2">By {article.author}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">By {article.author}</p>
 
-        
-        <p className="text-gray-800 mb-4">
+        <p className="text-gray-800 dark:text-gray-200 mb-4">
           {expanded ? article.content : preview}
         </p>
 
-        
         {!expanded && (
           <button
-            className="self-start text-blue-600 text-sm font-medium hover:underline mb-4"
+            className="self-start text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline mb-4"
             onClick={(e) => { e.stopPropagation(); setExpanded(true); }}
           >
             Abstract
           </button>
         )}
 
-        
-        <div className="flex items-center gap-4 text-gray-700 mb-4">
+        <div className="flex items-center gap-4 text-gray-700 dark:text-gray-300 mb-4">
           <div onClick={(e) => { e.stopPropagation(); handleReact("like"); }} className={`flex items-center gap-1 ${mine.liked ? "text-blue-600" : ""}`}>
             <FaThumbsUp /> <span className="text-sm">{counts.likes}</span>
           </div>
@@ -120,12 +113,11 @@ export default function ArticleCard({ article, user }) {
           <div onClick={(e) => { e.stopPropagation(); handleReact("heart"); }} className={`flex items-center gap-1 ${mine.hearted ? "text-red-600" : ""}`}>
             <FaHeart /> <span className="text-sm">{counts.hearts}</span>
           </div>
-          <div onClick={(e) => { e.stopPropagation(); setShowCommentInput(true); setShowComments(false); }} className="flex items-center gap-1 cursor-pointer hover:text-gray-900">
-            <FaComment /> 
+          <div onClick={(e) => { e.stopPropagation(); setShowCommentInput(true); setShowComments(false); }} className="flex items-center gap-1 cursor-pointer hover:text-gray-900 dark:hover:text-gray-100">
+            <FaComment />
           </div>
         </div>
 
-        
         <CommentsSection
           articleId={article._id}
           user={user}
