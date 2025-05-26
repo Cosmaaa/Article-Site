@@ -150,35 +150,21 @@ router.post("/:id/react", authenticateToken, async (req, res) => {
 });
 
 
-router.post(
-  "/",
-  authenticateToken,              
-  async (req, res) => {
-    try {
-      const { title, content, category } = req.body;
-      if (!title || !content || !category) {
-        return res
-          .status(400)
-          .json({ message: "Title, content and category are required" });
-      }
-      const authorId = req.user.userId;
-      const authorName = req.user.username; 
-      const newArticle = new Article({  
-        author: authorName || "Anonymous",
-        authorId,
-        title,
-        content,
-        category,
-        date: new Date(),
-      });
-      await newArticle.save();
-      res.status(201).json(newArticle);
-    } catch (err) {
-      console.error("Error in POST /api/articles:", err);
-      res.status(500).json({ message: "Server error" });
-    }
-  }
-);
+router.post("/", authenticateToken, async (req, res) => {
+  const { title, content, category } = req.body;
+  if (!title || !content || !category)
+    return res.status(400).json({ message: "All fields required" });
+
+  // folosim acum ce avem în req.user
+  const newArticle = new Article({
+    author:   req.user.name,
+    authorId: req.user.userId,
+    title, content, category,
+    date:     new Date(),
+  });
+  await newArticle.save();
+  res.status(201).json(newArticle);
+});
 
 
 
