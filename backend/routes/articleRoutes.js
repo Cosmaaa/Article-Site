@@ -15,6 +15,32 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/mine", authenticateToken, async (req, res) => {
+  try {
+    const mine = await Article.find({ authorId: req.user.userId }).sort({ date: -1 });
+    res.json(mine);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/:id", authenticateToken, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const art = await Article.findById(id);
+    if (!art) return res.status(404).json({ message: "Article not found" });
+
+    if (art.authorId.toString() !== req.user.userId) {
+      return res.status(403).json({ message: "Not your article" });
+    }
+
+    await Article.findByIdAndDelete(id);
+    return res.json({ message: "Deleted" });
+  } catch (err) {
+    console.error("Error deleting article:", err);  
+    return res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
 
 router.get("/:id/comments", async (req, res) => {
   try {
@@ -155,7 +181,7 @@ router.post("/", authenticateToken, async (req, res) => {
   if (!title || !content || !category)
     return res.status(400).json({ message: "All fields required" });
 
-  // folosim acum ce avem în req.user
+ 
   const newArticle = new Article({
     author:   req.user.name,
     authorId: req.user.userId,

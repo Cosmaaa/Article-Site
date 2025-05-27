@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
 const articleSchema = new mongoose.Schema({
-  author: String,
-  title: String,
-  content: String,
-  category: String,
-  date: Date,
+  author:   { type: String, required: true },
+  authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  title:    { type: String, required: true },
+  content:  { type: String, required: true },
+  category: { type: String, required: true },
+  date:     { type: Date,   default: Date.now },
 
-  
   likes:    { type: [mongoose.Schema.Types.ObjectId], ref: "User", default: [] },
   dislikes: { type: [mongoose.Schema.Types.ObjectId], ref: "User", default: [] },
   hearts:   { type: [mongoose.Schema.Types.ObjectId], ref: "User", default: [] },
@@ -20,10 +20,8 @@ const articleSchema = new mongoose.Schema({
       date:     { type: Date, default: Date.now },
     },
   ],
-   imageUrl: {
-    type: String,
-    default: null
-  }
+
+  imageUrl: { type: String, default: null },
 });
 
 export default mongoose.model("Article", articleSchema);

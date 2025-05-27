@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ArticleCard from "./ArticleCard";
 import CategorySideBar from "./CategorySideBar";
 import pen from "../assets/pen.svg";
@@ -8,48 +8,41 @@ import bgPattern from "../assets/background.jpg";
 import newsPaper from "../assets/newspaper.jpg";
 import { ThemeContext } from "../context/ThemeContext";
 
-export default function Home({ user }) {
-  const [articles, setArticles] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const { category } = useParams();
-  const navigate = useNavigate();
+export default function MyArticles({ user }) {
+  const [myArticles, setMyArticles] = useState([]);
   const { darkMode } = useContext(ThemeContext);
+  const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  useEffect(() => {
+  const fetchMine = () => {
+    if (!user || !token) return;
     axios
-      .get("http://localhost:5000/api/articles")
-      .then((res) => setArticles(res.data))
+      .get("http://localhost:5000/api/articles/mine", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setMyArticles(res.data))
       .catch(console.error);
-  }, []);
+  };
 
-  useEffect(() => {
-    if (!category || category === "toate") {
-      setFiltered(articles);
-    } else {
-      setFiltered(
-        articles.filter((a) => a.category.toLowerCase() === category)
-      );
-    }
-  }, [category, articles]);
+  useEffect(fetchMine, [user,token]);
 
   const handleDelete = (id) => {
     axios
       .delete(`http://localhost:5000/api/articles/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then(() => {
-        setArticles((prev) => prev.filter((a) => a._id !== id));
-      })
+      .then(fetchMine)
       .catch((err) => alert(err.response?.data?.message || "Delete failed"));
   };
+
+  const isLoggedIn = Boolean(user);
 
   return (
     <>
       <div className="relative w-full h-40">
         <img
           src={newsPaper}
-          alt={category || "All Articles"}
+          alt="Articolele mele"
           className="w-full h-full object-cover"
         />
         <div
@@ -58,15 +51,15 @@ export default function Home({ user }) {
         />
         <div className="absolute inset-0 flex items-center justify-center">
           <h1 className="text-white text-5xl font-semibold uppercase drop-shadow-lg">
-            {category ? category.charAt(0).toUpperCase() + category.slice(1) : "All Articles"}
+            My Articles
           </h1>
         </div>
-        {user && (
+        {isLoggedIn && (
           <button
             onClick={() => navigate("/publish")}
             className="absolute top-6 right-8 text-white p-4 rounded-full shadow-xl transition-colors duration-300"
-            style={{ backgroundColor: darkMode ? '#374151' : '#3B82F6' }}
-            title="Publish Article"
+            style={{ backgroundColor: darkMode ? "#374151" : "#3B82F6" }}
+            title="Scrie un articol nou"
           >
             <img src={pen} alt="Publish" className="w-[60px] h-[60px]" />
           </button>
@@ -85,18 +78,18 @@ export default function Home({ user }) {
         )}
         <CategorySideBar />
         <div className="flex-grow relative px-6 pt-8 z-10">
-          {filtered.length === 0 ? (
+          {myArticles.length === 0 ? (
             <p className="text-gray-200 dark:text-gray-300 text-xl mt-20 text-center">
-              Nu există articole în această categorie.
+              Nu ai articole publicate.
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-              {filtered.map((a) => (
+              {myArticles.map((a) => (
                 <ArticleCard
                   key={a._id}
                   article={a}
                   user={user}
-                  showDeleteButton={Boolean(user && a.authorId && a.authorId.toString() === user._id)}
+                  showDeleteButton={true}
                   onDelete={handleDelete}
                 />
               ))}

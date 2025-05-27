@@ -61,6 +61,15 @@ export default function Navbar({ user, onLogout }) {
         )}
       </div>
 
+      {user && (
+        <Link
+          to="/my-articles"
+          className="ml-4 px-3 py-1 rounded-md hover:bg-blue-500 dark:hover:bg-gray-700 transition"
+        >
+          My Articles
+        </Link>
+      )}
+
       <div className="flex-grow" />
 
       <button

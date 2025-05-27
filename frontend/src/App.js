@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import PublishForm from "./components/PublishForm";
 import Footer from "./components/Footer";
 import AuthMode from "./components/AuthMode";
+import MyArticles from "./components/MyArticles";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -85,6 +86,7 @@ function App() {
           <Route path="/:category" element={<Home user={user} />} />
           <Route path="/login" element={<Home user={user} />} />
           <Route path="/signup" element={<Home user={user} />} />
+          <Route path="/my-articles" element={<MyArticles user={user} />} />
         </Routes>
       </main>
 
